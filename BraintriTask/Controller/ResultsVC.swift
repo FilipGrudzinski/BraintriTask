@@ -32,7 +32,7 @@ class ResultsVC: UITableViewController {
         tableView.register(RepoResultsVCCell.self, forCellReuseIdentifier: cellId)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 50
+        tableView.rowHeight = 60
         tableView.tableFooterView = UIView()
     }
 }

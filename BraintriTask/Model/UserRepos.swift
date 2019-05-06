@@ -13,5 +13,4 @@ struct UserRepos {
     let repoName: String
     let language: String
     let avatarUrl: String
-    let createdDate: String
 }

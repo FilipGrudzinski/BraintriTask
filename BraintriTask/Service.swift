@@ -35,7 +35,7 @@ class Service: UIViewController {
     private func savingJson(_ json: JSON) {
         var userRepoArrayForDelegation = [UserRepos]()
         json.array?.forEach({ (json) in
-            let repo = UserRepos(userName: json["owner"]["login"].stringValue, repoName: json["name"].stringValue, language: json["language"].stringValue, avatarUrl: json["owner"]["avatar_url"].stringValue, createdDate: json["created_at"].stringValue)
+            let repo = UserRepos(userName: json["owner"]["login"].stringValue, repoName: json["name"].stringValue, language: json["language"].stringValue, avatarUrl: json["owner"]["avatar_url"].stringValue)
             userRepoArrayForDelegation.append(repo)
         })
         delegate?.userRepo(data: userRepoArrayForDelegation)

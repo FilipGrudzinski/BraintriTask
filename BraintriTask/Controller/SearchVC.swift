@@ -11,39 +11,54 @@ import UIKit
 class SearchVC: UIViewController, UITextFieldDelegate {
     private let baseUrl = "https://api.github.com/users/(user)/repos"
     private let request = Service()
-    private var searchTextField: UITextField!
-    private var searchButton: UIButton!
+    
+    private let searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter user name for search"
+        textField.font = UIFont.systemFont(ofSize: 15)
+        textField.clearButtonMode = .always
+        textField.borderStyle = UITextField.BorderStyle.roundedRect
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.keyboardType = UIKeyboardType.default
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        return textField
+    }()
+    
+    private let searchButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Search", for: .normal)
+        button.addTarget(self, action: #selector(searchButtonAction), for: .touchUpInside)
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         request.delegate = self
+        searchTextField.delegate = self
+        
     }
     
     private func setupView() {
-        navigationItem.title = "Braintri Task"
+        title = "Braintri Task"
         view.backgroundColor = .white
         
-        searchTextField = UITextField(frame: CGRect(x: 10, y: 80, width: UIScreen.main.bounds.width - 20, height: 30))
-        searchTextField.placeholder = "Enter user name for search"
-        searchTextField.font = UIFont.systemFont(ofSize: 15)
-        searchTextField.clearButtonMode = .always
-        searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
-        searchTextField.autocorrectionType = UITextAutocorrectionType.no
-        searchTextField.keyboardType = UIKeyboardType.default
-        searchTextField.returnKeyType = UIReturnKeyType.done
-        searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
-        searchTextField.delegate = self
-        
-        searchButton = UIButton(type: .system)
-        searchButton.frame.size = CGSize(width: 100, height: 50)
-        searchButton.center.x = self.view.center.x
-        searchButton.center.y = 130
-        searchButton.setTitle("Search", for: UIControl.State.normal)
-        searchButton.addTarget(self, action: #selector(searchButtonAction), for: .touchUpInside)
+        searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        searchButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(searchTextField)
         view.addSubview(searchButton)
+        
+        NSLayoutConstraint.activate([
+            searchTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
+            searchTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
+            searchTextField.topAnchor.constraint(equalTo: view.topAnchor, constant: 70),
+            
+            searchButton.widthAnchor.constraint(equalToConstant: 100),
+            searchButton.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
+            searchButton.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0)
+            ])
     }
     
     @objc func searchButtonAction(_ sender: Any) {
