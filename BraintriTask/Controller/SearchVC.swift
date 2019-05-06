@@ -8,42 +8,71 @@
 
 import UIKit
 
-class SearchVC: UIViewController {
-    @IBOutlet weak var searchTextField: UITextField!
+class SearchVC: UIViewController, UITextFieldDelegate {
     private let baseUrl = "https://api.github.com/users/(user)/repos"
-    private var userRepos = [UserRepos]()
+    private let request = Service()
+    private var searchTextField: UITextField!
+    private var searchButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setupView()
+        request.delegate = self
     }
-
-    @IBAction func searchButton(_ sender: Any) {
+    
+    private func setupView() {
+        navigationItem.title = "Braintri Task"
+        view.backgroundColor = .white
+        
+        searchTextField = UITextField(frame: CGRect(x: 10, y: 80, width: UIScreen.main.bounds.width - 20, height: 30))
+        searchTextField.placeholder = "Enter user name for search"
+        searchTextField.font = UIFont.systemFont(ofSize: 15)
+        searchTextField.clearButtonMode = .always
+        searchTextField.borderStyle = UITextField.BorderStyle.roundedRect
+        searchTextField.autocorrectionType = UITextAutocorrectionType.no
+        searchTextField.keyboardType = UIKeyboardType.default
+        searchTextField.returnKeyType = UIReturnKeyType.done
+        searchTextField.clearButtonMode = UITextField.ViewMode.whileEditing
+        searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        searchTextField.delegate = self
+        
+        searchButton = UIButton(type: .system)
+        searchButton.frame.size = CGSize(width: 100, height: 50)
+        searchButton.center.x = self.view.center.x
+        searchButton.center.y = 130
+        searchButton.setTitle("Search", for: UIControl.State.normal)
+        searchButton.addTarget(self, action: #selector(searchButtonAction), for: .touchUpInside)
+        
+        view.addSubview(searchTextField)
+        view.addSubview(searchButton)
+    }
+    
+    @objc func searchButtonAction(_ sender: Any) {
         if let text = searchTextField.text, !text.isEmpty {
             if let url = URL(string: baseUrl.replacingOccurrences(of: "(user)", with: text)) {
-                let request = Service()
                 request.loadRepos(url)
-                request.delegate = self
                 print(url)
             }
         } else {
             print("pusto")
         }
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
 }
 
 //MARK: - Extension for Delegate Functions
 extension SearchVC: UserExist {
     func userRepo(data: [UserRepos]) {
-        userReposArray = data
-        print(userReposArray)
-    }
-    
-    func exist(value: Bool) {
-        if value == true {
-            performSegue(withIdentifier: "goToResultsVC", sender: self)
-        } else {
-            print("No Data")
-        }
+        let newViewController = ResultsVC()
+        newViewController.dataForCell = data
+        navigationController?.pushViewController(newViewController, animated: true)
     }
 }

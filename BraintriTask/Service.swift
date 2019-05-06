@@ -12,12 +12,11 @@ import SVProgressHUD
 import SwiftyJSON
 
 protocol UserExist {
-    func exist(value: Bool)
     func userRepo(data: [UserRepos])
 }
 
 class Service {
-    var delegate : UserExist?
+    var delegate: UserExist?
     
     func loadRepos(_ url: URL) {
         SVProgressHUD.show(withStatus: "In Progress")
@@ -38,7 +37,6 @@ class Service {
             let repo = UserRepos(userName: json["owner"]["login"].stringValue, repoName: json["name"].stringValue, language: json["language"].stringValue, avatarUrl: json["owner"]["avatar_url"].stringValue, createdDate: json["created_at"].stringValue)
             userRepoArrayForDelegation.append(repo)
         })
-        delegate?.exist(value: true)
         delegate?.userRepo(data: userRepoArrayForDelegation)
     }
 }
