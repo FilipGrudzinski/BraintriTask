@@ -49,6 +49,7 @@ class Service: UIViewController {
         
         UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
     }
+    
     private func dismissPopUp() {
         dismiss(animated: true, completion: nil)
     }

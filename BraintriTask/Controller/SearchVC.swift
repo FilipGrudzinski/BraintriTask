@@ -32,7 +32,6 @@ class SearchVC: UIViewController, UITextFieldDelegate {
         searchTextField.autocorrectionType = UITextAutocorrectionType.no
         searchTextField.keyboardType = UIKeyboardType.default
         searchTextField.returnKeyType = UIReturnKeyType.done
-        searchTextField.clearButtonMode = UITextField.ViewMode.whileEditing
         searchTextField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         searchTextField.delegate = self
         
