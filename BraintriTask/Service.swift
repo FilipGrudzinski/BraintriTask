@@ -6,7 +6,7 @@
 //  Copyright © 2019 Filip. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Alamofire
 import SVProgressHUD
 import SwiftyJSON
@@ -15,17 +15,18 @@ protocol UserExist {
     func userRepo(data: [UserRepos])
 }
 
-class Service {
+class Service: UIViewController {
     var delegate: UserExist?
     
     func loadRepos(_ url: URL) {
         SVProgressHUD.show(withStatus: "In Progress")
-        Alamofire.request(url, method: .get).validate().responseJSON { response in
-            if response.result.value != nil {
-                let responseJSON: JSON = JSON(response.result.value!)
+        Alamofire.request(url, method: .get).validate(statusCode: 200..<300).responseJSON { response in
+            if let json = response.result.value {
+                let responseJSON: JSON = JSON(json)
                 self.savingJson(responseJSON)
                 SVProgressHUD.dismiss()
             } else {
+                self.successPopUp("No user repo found")
                 SVProgressHUD.dismiss()
             }
         }
@@ -38,5 +39,17 @@ class Service {
             userRepoArrayForDelegation.append(repo)
         })
         delegate?.userRepo(data: userRepoArrayForDelegation)
+    }
+    
+    func successPopUp(_ message: String) {
+        let alert = UIAlertController(title: message, message: "", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .cancel) {(UIAlertAction) in self.dismissPopUp()}
+        
+        alert.addAction(okAction)
+        
+        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true, completion: nil)
+    }
+    private func dismissPopUp() {
+        dismiss(animated: true, completion: nil)
     }
 }

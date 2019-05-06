@@ -51,10 +51,9 @@ class SearchVC: UIViewController, UITextFieldDelegate {
         if let text = searchTextField.text, !text.isEmpty {
             if let url = URL(string: baseUrl.replacingOccurrences(of: "(user)", with: text)) {
                 request.loadRepos(url)
-                print(url)
             }
         } else {
-            print("pusto")
+            request.successPopUp("Enter user name for search!")
         }
     }
     
