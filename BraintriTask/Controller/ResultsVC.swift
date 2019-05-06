@@ -9,7 +9,7 @@
 import UIKit
 
 class ResultsVC: UITableViewController {
-    let cellId = "Cell"
+    private let cellId = "Cell"
     var dataForCell = [UserRepos]()
     
     override func viewDidLoad() {
